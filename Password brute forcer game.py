@@ -41,15 +41,6 @@ for i in range(len(password)):
             break
 
 # Final display
-print("\n\n✅ Password cracked: " + ''.join(result))
-print(f"🔢 Total attempts: {attempts}\n")
+print("\n\n Password cracked: " + ''.join(result))
+print(f" Total attempts: {attempts}\n")
 
-# 📈 Plotting
-plt.figure(figsize=(10, 6))
-plt.bar(range(1, len(password) + 1), guesses_per_char, tick_label=[f'#{i+1}' for i in range(len(password))])
-plt.title("Brute Force Attempts Per Character")
-plt.xlabel("Password Character Position")
-plt.ylabel("Attempts")
-plt.grid(True, linestyle='--', alpha=0.5)
-plt.tight_layout()
-plt.show()
