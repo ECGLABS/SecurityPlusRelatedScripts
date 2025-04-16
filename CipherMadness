@@ -1,0 +1,31 @@
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.backends import default_backend
+import os
+
+# --- Setup ---
+plaintext = b"SecurityPlusRocks!"  # 17 bytes
+
+# --- Block Cipher (AES) ---
+key_block = os.urandom(32)  # 256-bit key
+iv_block = os.urandom(16)   # Initialization Vector for CBC mode
+
+# Pad plaintext to 128-bit (16 byte) block size
+padder = padding.PKCS7(128).padder()
+padded_data = padder.update(plaintext) + padder.finalize()
+
+cipher_block = Cipher(algorithms.AES(key_block), modes.CBC(iv_block), backend=default_backend())
+encryptor_block = cipher_block.encryptor()
+ct_block = encryptor_block.update(padded_data) + encryptor_block.finalize()
+
+print(f"\n🔐 AES Block Cipher:\nCiphertext (hex): {ct_block.hex()}")
+
+# --- Stream Cipher (ChaCha20) ---
+key_stream = os.urandom(32)  # 256-bit key
+nonce_stream = os.urandom(16)
+
+cipher_stream = Cipher(algorithms.ChaCha20(key_stream, nonce_stream), mode=None, backend=default_backend())
+encryptor_stream = cipher_stream.encryptor()
+ct_stream = encryptor_stream.update(plaintext)
+
+print(f"\n💧 ChaCha20 Stream Cipher:\nCiphertext (hex): {ct_stream.hex()}")
